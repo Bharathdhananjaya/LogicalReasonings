@@ -1,0 +1,28 @@
+<PropertyGroup>
+    <Configuration>Release</Configuration>
+    <PackageDir>$(MSBuildProjectDirectory)\obj\$(Configuration)\Package\PackageTmp</PackageDir>
+    <ServerPath>\\server\path</ServerPath>
+    <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\...</MSBuildCommunityTasksPath>
+ 
+
+<ItemGroup>
+    <DeployFileGroup Include="**\*.aspx;**\*.ascx;**\*.asmx;**\*.asax;**\*.ashx;**\*.config;**\*.xml;**\*.css;**\*.js;**\*.template;**\*.chrome;**\*.gif;**\*.jpg;**\*.jpeg;**\*.png;**\*.dll;**\*.pdb;"
+                     Exclude="**\Deploy\**"
+                     />
+  </ItemGroup>
+ 
+<Copy SourceFiles="@(DeployFileGroup)" DestinationFiles="@(DeployFileGroup->'Deploy\$(Configuration)\%(RecursiveDir)\%(Filename)%(Extension)')" />
+
+<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
+
+<Target Name="Deploy">
+    <MSBuild Projects="@(Project)" Targets="Build;Package" Properties="Configuration=$(Configuration)"/>
+    <RoboCopy
+        SourceFolder="@(PackageDir)"
+        DestinationFolder="$(ServerPath)"
+        Subdirectories="true"
+        Mirror="true"
+        />
+</Target>
+  
+  </PropertyGroup>  

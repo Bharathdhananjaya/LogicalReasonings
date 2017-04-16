@@ -1,0 +1,30 @@
+
+<Project name="system" default="build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Target Name="build">
+        <MSBuild Project="C:\System\system.build"/>
+    </Target>
+</Project>
+
+
+  
+
+<PropertyGroup Condition=" '$(UseBuildNumber)' == 'true' ">
+  <ReleaseDirectory>$(ReleaseBaseDirectory)$(ReleaseName)\$(BuildNumber)</ReleaseDirectory>
+  </PropertyGroup>
+
+<ItemGroup>
+  <OutputFiles Include="
+               $(SourceRoot)**\*.aspx;
+               $(SourceRoot)**\*.dll;
+               $(SourceRoot)**\*.gif;
+               $(SourceRoot)**\*.ascx;" />
+</ItemGroup>
+
+
+
+<Copy
+    SourceFiles="@(OutputFiles)"
+    DestinationFolder="$(ReleaseDirectory)"
+    SkipUnchangedFiles="false"
+    />
+  
